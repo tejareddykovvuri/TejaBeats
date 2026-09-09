@@ -5,6 +5,7 @@
 
 import 'dart:async';
 import 'dart:io' as io;
+import 'package:flutter/foundation.dart';
 import 'package:Bloomee/services/license_service.dart';
 import 'package:Bloomee/blocs/downloader/cubit/downloader_cubit.dart';
 import 'package:Bloomee/blocs/global_events/global_events_cubit.dart';
@@ -143,7 +144,7 @@ Future<void> importItems(String path) async {
 }
 
 Future<void> setHighRefreshRate() async {
-  if (io.Platform.isAndroid) {
+  if (!kIsWeb && io.Platform.isAndroid) {
     try {
       await FlutterDisplayMode.setHighRefreshRate();
     } catch (e) {
@@ -164,7 +165,11 @@ Future<void> setupPlayerCubit() async {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   GestureBinding.instance.resamplingEnabled = true;
-  MediaKit.ensureInitialized();
+  try {
+    MediaKit.ensureInitialized();
+  } catch (e) {
+    debugPrint('MediaKit init error: $e');
+  }
   LicenseService.registerCustomLicenses();
   runApp(const MyApp());
 }
@@ -227,17 +232,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     // Check once at startup; DBProvider.appSuppDir is set by bootstrapApp().
     try {
-      _migrationPending = legacy_migration.needsMigration(
-        DBProvider.appSuppDir,
-        DBProvider.appDocDir,
-      );
-      _onboardingPending = !OnboardingService.onboardingDone;
-      _pluginBootstrapPending = !PluginBootstrapService.bootstrapDone;
+      if (!kIsWeb) {
+        _migrationPending = legacy_migration.needsMigration(
+          DBProvider.appSuppDir,
+          DBProvider.appDocDir,
+        );
+      }
+      _onboardingPending = kIsWeb ? false : !OnboardingService.onboardingDone;
+      _pluginBootstrapPending = kIsWeb ? false : !PluginBootstrapService.bootstrapDone;
     } catch (e, st) {
       debugPrint('Bootstrap flags check error: $e\n$st');
     }
 
-    if (io.Platform.isAndroid) {
+    if (!kIsWeb && io.Platform.isAndroid) {
       unawaited(initPlatformState());
     }
 
@@ -323,7 +330,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (_bloomeePlayerCubit != null) {
       _bloomeePlayerCubit!.close();
     }
-    if (io.Platform.isWindows || io.Platform.isLinux || io.Platform.isMacOS) {
+    if (!kIsWeb &&
+        (io.Platform.isWindows || io.Platform.isLinux || io.Platform.isMacOS)) {
       DiscordService.clearPresence();
     }
     super.dispose();
@@ -376,7 +384,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           if (!mounted) return;
           setState(() {
             _onboardingPending = false;
-            _pluginBootstrapPending = !PluginBootstrapService.bootstrapDone;
+            _pluginBootstrapPending = kIsWeb ? false : !PluginBootstrapService.bootstrapDone;
           });
         },
       );

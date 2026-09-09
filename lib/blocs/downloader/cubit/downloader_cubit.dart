@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:Bloomee/blocs/library/cubit/library_items_cubit.dart';
 import 'package:Bloomee/services/plugin/plugin_service.dart';
@@ -102,10 +103,13 @@ class DownloaderCubit extends Cubit<DownloaderState> {
   }
 
   Future<Directory> _getDownloadDirectory() async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       final directory = (await getDownloadsDirectory()) ??
           await getApplicationDocumentsDirectory();
       return directory;
+    }
+    if (kIsWeb) {
+      return Directory('downloads');
     }
     final p = await _settingsDao.getSettingStr(SettingKeys.downPathSetting);
     if (p != null) {

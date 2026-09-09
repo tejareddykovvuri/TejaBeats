@@ -15,7 +15,7 @@ extension GetMediaPlaylistDBCollection on Isar {
 
 const MediaPlaylistDBSchema = CollectionSchema(
   name: r'MediaPlaylistDB',
-  id: 6090471689057609940,
+  id: 81406164,
   properties: {
     r'hashCode': PropertySchema(
       id: 0,
@@ -46,7 +46,7 @@ const MediaPlaylistDBSchema = CollectionSchema(
   indexes: {},
   links: {
     r'mediaItems': LinkSchema(
-      id: -3256593681391473623,
+      id: 1964954583,
       name: r'mediaItems',
       target: r'MediaItemDB',
       single: false,
@@ -927,7 +927,7 @@ extension GetPlaylistsInfoDBCollection on Isar {
 
 const PlaylistsInfoDBSchema = CollectionSchema(
   name: r'PlaylistsInfoDB',
-  id: 1617157397511618734,
+  id: 1083392174,
   properties: {
     r'artURL': PropertySchema(
       id: 0,
@@ -2701,7 +2701,7 @@ extension GetMediaItemDBCollection on Isar {
 
 const MediaItemDBSchema = CollectionSchema(
   name: r'MediaItemDB',
-  id: 7205399312875226514,
+  id: 1288013202,
   properties: {
     r'album': PropertySchema(
       id: 0,
@@ -2776,7 +2776,7 @@ const MediaItemDBSchema = CollectionSchema(
   idName: r'id',
   indexes: {
     r'title': IndexSchema(
-      id: -7636685945352118059,
+      id: 166616875,
       name: r'title',
       unique: false,
       replace: false,
@@ -2791,7 +2791,7 @@ const MediaItemDBSchema = CollectionSchema(
   },
   links: {
     r'mediaInPlaylistsDB': LinkSchema(
-      id: 6308841877349556711,
+      id: 59204071,
       name: r'mediaInPlaylistsDB',
       target: r'MediaPlaylistDB',
       single: false,
@@ -5202,7 +5202,7 @@ extension GetAppSettingsStrDBCollection on Isar {
 
 const AppSettingsStrDBSchema = CollectionSchema(
   name: r'AppSettingsStrDB',
-  id: -9186585785377851692,
+  id: 1679395116,
   properties: {
     r'hashCode': PropertySchema(
       id: 0,
@@ -6274,7 +6274,7 @@ extension GetAppSettingsBoolDBCollection on Isar {
 
 const AppSettingsBoolDBSchema = CollectionSchema(
   name: r'AppSettingsBoolDB',
-  id: -3642544654543208017,
+  id: 1955315281,
   properties: {
     r'hashCode': PropertySchema(
       id: 0,
@@ -6883,7 +6883,7 @@ extension GetChartsCacheDBCollection on Isar {
 
 const ChartsCacheDBSchema = CollectionSchema(
   name: r'ChartsCacheDB',
-  id: 7045537303772603982,
+  id: 1394681422,
   properties: {
     r'chartItems': PropertySchema(
       id: 0,
@@ -7771,7 +7771,7 @@ extension GetRecentlyPlayedDBCollection on Isar {
 
 const RecentlyPlayedDBSchema = CollectionSchema(
   name: r'RecentlyPlayedDB',
-  id: -815534397388884072,
+  id: 712640616,
   properties: {
     r'lastPlayed': PropertySchema(
       id: 0,
@@ -7787,7 +7787,7 @@ const RecentlyPlayedDBSchema = CollectionSchema(
   indexes: {},
   links: {
     r'mediaItem': LinkSchema(
-      id: 5428180275953081554,
+      id: 83303634,
       name: r'mediaItem',
       target: r'MediaItemDB',
       single: true,
@@ -8174,7 +8174,7 @@ extension GetYtLinkCacheDBCollection on Isar {
 
 const YtLinkCacheDBSchema = CollectionSchema(
   name: r'YtLinkCacheDB',
-  id: 7299293342969868585,
+  id: 1125626153,
   properties: {
     r'expireAt': PropertySchema(
       id: 0,
@@ -9103,7 +9103,7 @@ extension GetDownloadDBCollection on Isar {
 
 const DownloadDBSchema = CollectionSchema(
   name: r'DownloadDB',
-  id: -6833781486557602446,
+  id: 451420814,
   properties: {
     r'fileName': PropertySchema(
       id: 0,
@@ -10031,7 +10031,7 @@ extension GetSavedCollectionsDBCollection on Isar {
 
 const SavedCollectionsDBSchema = CollectionSchema(
   name: r'SavedCollectionsDB',
-  id: -2802148582567515827,
+  id: 399316659,
   properties: {
     r'coverArt': PropertySchema(
       id: 0,
@@ -11940,7 +11940,7 @@ extension GetNotificationDBCollection on Isar {
 
 const NotificationDBSchema = CollectionSchema(
   name: r'NotificationDB',
-  id: 375537289431161249,
+  id: 1349851553,
   properties: {
     r'body': PropertySchema(
       id: 0,
@@ -13295,7 +13295,7 @@ extension GetLyricsDBCollection on Isar {
 
 const LyricsDBSchema = CollectionSchema(
   name: r'LyricsDB',
-  id: 2869562449821425733,
+  id: 845668421,
   properties: {
     r'album': PropertySchema(
       id: 0,
@@ -15430,7 +15430,7 @@ extension GetSearchHistoryDBCollection on Isar {
 
 const SearchHistoryDBSchema = CollectionSchema(
   name: r'SearchHistoryDB',
-  id: 197041396622818937,
+  id: 868220537,
   properties: {
     r'lastSearched': PropertySchema(
       id: 0,
@@ -15975,7 +15975,7 @@ extension SearchHistoryDBQueryProperty
 
 const ChartItemDBSchema = Schema(
   name: r'ChartItemDB',
-  id: 3430415545377878575,
+  id: 1849291311,
   properties: {
     r'artURL': PropertySchema(
       id: 0,

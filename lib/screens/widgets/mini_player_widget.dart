@@ -659,57 +659,64 @@ class _DesktopTejaPlayerBarState extends State<_DesktopTejaPlayerBar> {
             child: Row(
               children: [
                 Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      context.read<PlayerOverlayCubit>().showPlayer();
-                    },
-                    child: Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: LoadImageCached(
-                            imageUrl: widget.thumbUrl,
-                            fallbackUrl: widget.song.thumbnail.url,
-                            width: 48,
-                            height: 48,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.song.title,
-                                style: const TextStyle(
-                                  fontFamily: 'Gilroy',
-                                  fontSize: 13.5,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Tooltip(
+                      message: 'Open Now Playing',
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          context.read<PlayerOverlayCubit>().showPlayer();
+                        },
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LoadImageCached(
+                                imageUrl: widget.thumbUrl,
+                                fallbackUrl: widget.song.thumbnail.url,
+                                width: 48,
+                                height: 48,
+                                fit: BoxFit.cover,
                               ),
-                              const SizedBox(height: 2),
-                              TrackMetadataLinks(
-                                track: widget.song,
-                                style: TextStyle(
-                                  fontFamily: 'Gilroy',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 11.5,
-                                  color: Colors.white.withValues(alpha: 0.55),
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.song.title,
+                                    style: const TextStyle(
+                                      fontFamily: 'Gilroy',
+                                      fontSize: 13.5,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  TrackMetadataLinks(
+                                    track: widget.song,
+                                    style: TextStyle(
+                                      fontFamily: 'Gilroy',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 11.5,
+                                      color:
+                                          Colors.white.withValues(alpha: 0.55),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

@@ -33,6 +33,31 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    // Unlock browser audio playback on first user gesture
+    (function() {
+      function unlockAudio() {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            const ctx = new AudioContext();
+            if (ctx.state === 'suspended') {
+              ctx.resume();
+            }
+          }
+          const audio = new Audio();
+          audio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+          audio.play().then(function() {
+            audio.pause();
+          }).catch(function() {});
+        } catch(e) {}
+        window.removeEventListener('pointerdown', unlockAudio);
+        window.removeEventListener('keydown', unlockAudio);
+      }
+      window.addEventListener('pointerdown', unlockAudio, { once: true, passive: true });
+      window.addEventListener('keydown', unlockAudio, { once: true, passive: true });
+    })();
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

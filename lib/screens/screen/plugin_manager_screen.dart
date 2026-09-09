@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:Bloomee/core/di/service_locator.dart';
 import 'package:Bloomee/core/theme/app_theme.dart';
@@ -389,7 +390,7 @@ class _PluginManagerScreenState extends State<PluginManagerScreen> {
       // On Android, MIME-type resolution for custom extension '.bex' causes many
       // vendor file managers to grey out or hide .bex files.
       // We use FileType.any on Android, and FileType.custom on desktop.
-      if (Platform.isAndroid) {
+      if (!kIsWeb && Platform.isAndroid) {
         result = await FilePicker.platform.pickFiles(
           type: FileType.any,
           dialogTitle: l10n.pluginManagerSelectPackage,

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -206,7 +207,7 @@ class _PlaylistOptionsSheet extends StatelessWidget {
                                     }
                                   },
                                 ),
-                                if (!Platform.isAndroid)
+                                if (!kIsWeb && !Platform.isAndroid)
                                   _BottomSheetTile(
                                     icon: MingCute.file_export_line,
                                     title: l10n.playlistExportFile,

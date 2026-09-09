@@ -1,2 +1,2 @@
-// Make the entire site statically prerendered
-export const prerender = true;
+// Server-side rendering enabled for initial page loads
+export const ssr = true;

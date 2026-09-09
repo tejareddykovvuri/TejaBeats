@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:Bloomee/blocs/settings_cubit/cubit/settings_cubit.dart';
 import 'package:Bloomee/services/player/stream_quality_selector.dart';
@@ -109,8 +110,8 @@ class _DownloadSettingsState extends State<DownloadSettings> {
                     icon: MingCute.folder_fill,
                     title: l10n.downloadSettingFolder,
                     subtitle: state.downPath,
-                    roundBottom: Platform.isAndroid,
-                    onTap: Platform.isAndroid
+                    roundBottom: (!kIsWeb && Platform.isAndroid),
+                    onTap: (!kIsWeb && Platform.isAndroid)
                         ? () {}
                         : () async {
                             FilePicker.platform
@@ -124,7 +125,7 @@ class _DownloadSettingsState extends State<DownloadSettings> {
                             });
                           },
                   ),
-                  if (!Platform.isAndroid) ...[
+                  if (kIsWeb || (!kIsWeb && !Platform.isAndroid)) ...[
                     const SettingDivider(),
                     SettingNavTile(
                       icon: MingCute.refresh_1_line,

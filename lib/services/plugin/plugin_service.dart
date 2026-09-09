@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:Bloomee/services/plugin/web_plugin_handler.dart';
+import 'package:Bloomee/services/plugin/web_plugin_info.dart';
 
 import 'package:Bloomee/plugins/errors/plugin_exceptions.dart';
 import 'package:Bloomee/services/db/dao/settings_dao.dart';
@@ -35,7 +38,7 @@ class PluginService {
   Future<void>? _initializing;
 
   /// Whether the service has been initialized.
-  bool get isInitialized => _manager != null;
+  bool get isInitialized => kIsWeb || _manager != null;
 
   /// The Rust [PluginManager] handle. Throws if not initialized.
   PluginManager get manager {
@@ -56,6 +59,7 @@ class PluginService {
   ///
   /// Must be called once during app startup, before any plugin operations.
   Future<void> initialize({String? pluginsDir}) async {
+    if (kIsWeb) return;
     if (_manager != null) {
       log('PluginService already initialized', name: 'PluginService');
       return;
@@ -123,6 +127,9 @@ class PluginService {
     required String pluginId,
     required PluginRequest request,
   }) async {
+    if (kIsWeb) {
+      return await WebPluginHandler.execute(pluginId, request);
+    }
     try {
       final response = await bridge.handlePluginRequest(
         manager: manager,
@@ -145,6 +152,10 @@ class PluginService {
     required String pluginId,
     required PluginType pluginType,
   }) async {
+    if (kIsWeb) {
+      log('Loaded web plugin: $pluginId ($pluginType)', name: 'PluginService');
+      return;
+    }
     try {
       await bridge.loadPlugin(
         manager: manager,
@@ -166,6 +177,7 @@ class PluginService {
     required String pluginId,
     required PluginType pluginType,
   }) async {
+    if (kIsWeb) return;
     try {
       await bridge.unloadPlugin(
         manager: manager,
@@ -260,11 +272,29 @@ class PluginService {
 
   /// Get all available plugins (scanned from plugins directory).
   Future<List<PluginInfo>> getAvailablePlugins() async {
+    if (kIsWeb) {
+      return [
+        WebPluginInfo.jioSaavn(),
+        WebPluginInfo.ytMusic(),
+        WebPluginInfo.ytVideo(),
+        WebPluginInfo.ytSuggestions(),
+        WebPluginInfo.lyrics(),
+        WebPluginInfo.jioSuggestions(),
+      ];
+    }
     return bridge.getAvailablePlugins(manager: manager);
   }
 
   /// Get IDs of currently loaded plugins (synchronous — no FFI overhead).
   List<String> getLoadedPlugins() {
+    if (kIsWeb) {
+      return [
+        WebPluginHandler.jioSaavnPluginId,
+        WebPluginHandler.ytMusicPluginId,
+        WebPluginHandler.ytVideoPluginId,
+        WebPluginHandler.ytSuggestionsPluginId,
+      ];
+    }
     return bridge.getLoadedPlugins(manager: manager);
   }
 
@@ -272,7 +302,13 @@ class PluginService {
   Future<bool> isPluginLoaded({
     required String pluginId,
     required PluginType pluginType,
-  }) {
+  }) async {
+    if (kIsWeb) {
+      return pluginId == WebPluginHandler.jioSaavnPluginId ||
+          pluginId == WebPluginHandler.ytMusicPluginId ||
+          pluginId == WebPluginHandler.ytVideoPluginId ||
+          pluginId == WebPluginHandler.ytSuggestionsPluginId;
+    }
     return bridge.isPluginLoaded(
       manager: manager,
       pluginId: pluginId,
@@ -282,6 +318,7 @@ class PluginService {
 
   /// Refresh the available plugins list (re-scan directory).
   Future<void> refreshPlugins() async {
+    if (kIsWeb) return;
     await bridge.refreshAvailablePlugins(manager: manager);
   }
 
@@ -293,6 +330,7 @@ class PluginService {
     required String pluginId,
     required PluginType pluginType,
   }) async {
+    if (kIsWeb) return;
     final loaded = await bridge.isPluginLoaded(
       manager: manager,
       pluginId: pluginId,
@@ -332,6 +370,27 @@ class PluginService {
     required String pluginId,
     required PluginType pluginType,
   }) {
+    if (kIsWeb) {
+      if (pluginId == WebPluginHandler.jioSaavnPluginId) {
+        if (pluginType == PluginType.lyricsProvider) {
+          return Future.value(WebPluginInfo.lyrics());
+        }
+        if (pluginType == PluginType.searchSuggestionProvider) {
+          return Future.value(WebPluginInfo.jioSuggestions());
+        }
+        return Future.value(WebPluginInfo.jioSaavn());
+      }
+      if (pluginId == WebPluginHandler.ytMusicPluginId) {
+        return Future.value(WebPluginInfo.ytMusic());
+      }
+      if (pluginId == WebPluginHandler.ytVideoPluginId) {
+        return Future.value(WebPluginInfo.ytVideo());
+      }
+      if (pluginId == WebPluginHandler.ytSuggestionsPluginId) {
+        return Future.value(WebPluginInfo.ytSuggestions());
+      }
+      return Future.value(null);
+    }
     return bridge.getPluginInfo(
       manager: manager,
       pluginId: pluginId,

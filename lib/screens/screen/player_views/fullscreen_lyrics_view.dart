@@ -12,6 +12,7 @@ import 'package:Bloomee/l10n/app_localizations.dart';
 import 'package:Bloomee/core/theme/app_theme.dart';
 import 'package:Bloomee/utils/load_image.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,6 +76,7 @@ class _FullscreenLyricsViewState extends State<FullscreenLyricsView> {
 
   void _startHideControlsTimer() {
     _hideControlsTimer?.cancel();
+    if (kIsWeb) return;
     _hideControlsTimer = Timer(const Duration(seconds: 4), () {
       if (mounted && _showControls && !_isSyncMode) {
         setState(() => _showControls = false);
@@ -166,6 +168,9 @@ class _FullscreenLyricsViewState extends State<FullscreenLyricsView> {
                                   icon: MingCute.music_2_line,
                                   message: l10n.playerNoLyricsFound),
                       LyricsError() => SignBoardWidget(
+                          icon: MingCute.music_2_line,
+                          message: l10n.playerNoLyricsFound),
+                      LyricsNoPlugin() => SignBoardWidget(
                           icon: MingCute.music_2_line,
                           message: l10n.playerNoLyricsFound),
                       LyricsState() => const SizedBox.shrink(),

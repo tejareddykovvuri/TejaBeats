@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:Bloomee/blocs/media_player/bloomee_player_cubit.dart';
 import 'package:Bloomee/core/models/exported.dart';
 import 'package:Bloomee/core/models/media_playlist_model.dart';
@@ -119,7 +120,7 @@ class _HorizontalCardViewState extends State<HorizontalCardView> {
             height: 220,
             child: Row(
               children: [
-                if (Platform.isWindows || Platform.isLinux)
+                if (kIsWeb || (!kIsWeb && (Platform.isWindows || Platform.isLinux)))
                   IconButton(
                     icon: const Icon(MingCute.left_line),
                     onPressed: _scrollToPrevious,
@@ -150,7 +151,7 @@ class _HorizontalCardViewState extends State<HorizontalCardView> {
                     },
                   ),
                 ),
-                if (Platform.isWindows || Platform.isLinux)
+                if (kIsWeb || (!kIsWeb && (Platform.isWindows || Platform.isLinux)))
                   IconButton(
                     icon: const Icon(MingCute.right_line),
                     onPressed: _scrollToNext,

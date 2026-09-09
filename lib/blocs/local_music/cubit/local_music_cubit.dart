@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:Bloomee/services/local_music_service.dart';
 import 'package:Bloomee/src/rust/api/plugin/models.dart';
@@ -66,7 +67,7 @@ class LocalMusicCubit extends Cubit<LocalMusicState> {
 
   Future<void> addFolderViaPicker() async {
     // Folder management only makes sense on desktop platforms.
-    if (LocalMusicService.isMobile || Platform.isIOS) return;
+    if (kIsWeb || LocalMusicService.isMobile || Platform.isIOS) return;
     final result = await FilePicker.platform.getDirectoryPath();
     if (result == null) return;
     await _service.addFolder(result);

@@ -10,6 +10,7 @@ import 'package:Bloomee/plugins/services/plugin_repository_service.dart';
 import 'package:Bloomee/services/db/dao/settings_dao.dart';
 import 'package:Bloomee/services/db/db_provider.dart';
 import 'package:Bloomee/services/plugin_bootstrap_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -114,11 +115,13 @@ class _PluginBootstrapOverlayState extends State<PluginBootstrapOverlay>
   }
 
   Future<void> _exitApp() async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       await SystemNavigator.pop();
       return;
     }
-    exit(0);
+    if (!kIsWeb) {
+      exit(0);
+    }
   }
 
   @override

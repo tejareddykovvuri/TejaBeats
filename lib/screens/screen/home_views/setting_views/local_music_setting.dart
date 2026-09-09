@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:Bloomee/blocs/local_music/cubit/local_music_cubit.dart';
 import 'package:Bloomee/l10n/app_localizations.dart';
@@ -204,7 +205,7 @@ class _LocalMusicSettingsState extends State<LocalMusicSettings> {
           ),
 
           // Folder management — desktop only
-          if (!LocalMusicService.isMobile && !Platform.isIOS) ...[
+          if (!kIsWeb && !LocalMusicService.isMobile && !Platform.isIOS) ...[
             const SizedBox(height: 28),
             SettingSectionHeader(label: l10n.settingsMusicFolders),
             SettingCard(

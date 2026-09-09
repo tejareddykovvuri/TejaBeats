@@ -18,6 +18,7 @@ import 'package:Bloomee/services/plugin/plugin_service.dart';
 import 'package:Bloomee/services/plugin/plugin_storage_service.dart';
 import 'package:Bloomee/plugins/services/plugin_repository_service.dart';
 import 'package:Bloomee/services/db/dao/settings_dao.dart';
+import 'package:flutter/foundation.dart';
 
 /// Service locator — static singleton registry.
 ///
@@ -87,6 +88,9 @@ class ServiceLocator {
   static Future<void> initializePluginSystem() async {
     // 1. Initialize PluginService (creates Rust PluginManager).
     await pluginService.initialize();
+
+    // On web, skip Rust event bus / storage — web uses WebPluginHandler directly.
+    if (kIsWeb) return;
 
     // 2. Connect event bus to Rust event stream.
     pluginEventBus.connect(pluginService.manager);

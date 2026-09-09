@@ -25,6 +25,10 @@ class AppRouter {
     navigatorKey: globalRouterKey,
     routes: [
       GoRoute(
+        path: '/',
+        redirect: (_, __) => '/Explore',
+      ),
+      GoRoute(
         path: '/AddToPlaylist',
         parentNavigatorKey: globalRouterKey,
         name: RoutePaths.addToPlaylistScreen,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:Bloomee/plugins/utils/media_id.dart';
 import 'package:Bloomee/services/db/dao/playlist_dao.dart';
@@ -327,6 +328,7 @@ class DownloadDAO {
   }
 
   Future<bool> _isExistingLocalImagePath(String? value) async {
+    if (kIsWeb) return false;
     if (value == null || value.trim().isEmpty) return false;
     final trimmed = value.trim();
 

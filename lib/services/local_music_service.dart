@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:Bloomee/core/constants/setting_keys.dart';
 import 'package:Bloomee/plugins/utils/media_id.dart';
@@ -23,7 +24,7 @@ class LocalMusicService {
 
   /// Android gets automatic full-library discovery via MediaStore.
   /// All other platforms (iOS, Windows, Linux, macOS) use folder-based scanning.
-  static bool get isMobile => Platform.isAndroid;
+  static bool get isMobile => !kIsWeb && Platform.isAndroid;
   static const PermissionRequestOption _audioPermissionRequest =
       PermissionRequestOption(
     androidPermission: AndroidPermission(
@@ -105,6 +106,7 @@ class LocalMusicService {
   // ── Scanning ────────────────────────────────────────────────────────────────
 
   Future<List<Track>> scanAndPersist() async {
+    if (kIsWeb) return [];
     return isMobile ? _scanMobile() : _scanDesktop();
   }
 
@@ -575,6 +577,7 @@ class LocalMusicService {
   }
 
   Future<List<String>> _defaultDesktopFolders() async {
+    if (kIsWeb) return const [];
     final dirs = <String>[];
     if (Platform.isWindows) {
       final userProfile = Platform.environment['USERPROFILE'];

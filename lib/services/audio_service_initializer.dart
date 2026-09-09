@@ -15,7 +15,10 @@ import 'package:audio_session/audio_session.dart';
 ///
 /// Calling configure() here, before AudioService.init(), eliminates the race:
 /// the session is fully configured before any BloomeeMusicPlayer method can run.
+import 'package:flutter/foundation.dart';
+
 Future<void> setupAudioSession() async {
+  if (kIsWeb) return;
   final session = await AudioSession.instance;
   await session.configure(AudioSessionConfiguration(
     // iOS
@@ -76,6 +79,11 @@ class PlayerInitializer {
   }
 
   Future<BloomeeMusicPlayer> _initializeInternal() async {
+    if (kIsWeb) {
+      final player = BloomeeMusicPlayer();
+      _player = player;
+      return player;
+    }
     final player = await AudioService.init(
       builder: () => BloomeeMusicPlayer(),
       config: const AudioServiceConfig(

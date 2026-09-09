@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:Bloomee/core/models/exported.dart';
 import 'package:Bloomee/core/constants/sentinel_values.dart';
 import 'package:dart_discord_rpc/dart_discord_rpc.dart';
@@ -10,7 +11,8 @@ class DiscordService {
 
   /// Initializes Discord RPC once
   static void initialize() {
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    if (!kIsWeb &&
+        (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
       try {
         DiscordRPC.initialize();
         _discordRPC = DiscordRPC(applicationId: '1339113296405725235');
@@ -51,7 +53,8 @@ class DiscordService {
 
   /// Clears Discord presence
   static void clearPresence() {
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    if (!kIsWeb &&
+        (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
       try {
         _discordRPC?.clearPresence();
         log(" Cleared Discord Presence", name: "DiscordService");

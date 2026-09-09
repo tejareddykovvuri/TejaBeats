@@ -16,6 +16,7 @@ import 'package:Bloomee/screens/widgets/media_metadata_links.dart';
 import 'package:Bloomee/screens/screen/player_views/segments_sheet.dart';
 import 'package:Bloomee/services/bloomee_player.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Bloomee/l10n/app_localizations.dart';
@@ -87,9 +88,8 @@ class _AudioPlayerViewState extends State<AudioPlayerView>
         leading: IconButton(
           icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 32),
           onPressed: () {
-            if (!_upNextPanelController.collapse()) {
-              context.read<PlayerOverlayCubit>().hidePlayer();
-            }
+            _upNextPanelController.collapse();
+            context.read<PlayerOverlayCubit>().hidePlayer();
           },
         ),
         actions: [
@@ -518,6 +518,11 @@ class _DownloadButtonState extends State<_DownloadButton> {
 
         return IconButton(
           onPressed: () {
+            if (kIsWeb) {
+              SnackbarService.showMessage(
+                  'Song downloads are available in the TejaBeats Windows app.');
+              return;
+            }
             if (_isDownloaded) {
               SnackbarService.showMessage('Already downloaded');
             } else {

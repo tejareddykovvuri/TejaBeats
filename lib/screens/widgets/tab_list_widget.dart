@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:Bloomee/screens/widgets/paging_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -123,7 +124,7 @@ class TabSongListWidget extends StatelessWidget {
 
     return Column(
       children: [
-        if (Platform.isWindows || Platform.isLinux)
+        if (kIsWeb || (!kIsWeb && (Platform.isWindows || Platform.isLinux)))
           Align(
             alignment: Alignment.centerRight,
             child: Row(

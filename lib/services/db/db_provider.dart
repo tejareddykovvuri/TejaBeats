@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:isar_community/isar.dart';
+import 'package:Bloomee/services/db/web_isar.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -73,6 +75,9 @@ class DBProvider {
 
   /// Open (or return existing) Isar instance.
   static Future<Isar> openDB() async {
+    if (kIsWeb) {
+      return WebIsar(_schemas);
+    }
     if (Isar.instanceNames.isEmpty) {
       final File dbFile = File(p.join(appSuppDir, 'dbv3.isar'));
       if (!await dbFile.exists()) {

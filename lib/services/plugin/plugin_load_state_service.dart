@@ -4,6 +4,9 @@ import 'dart:async';
 import 'package:Bloomee/core/constants/setting_keys.dart';
 import 'package:Bloomee/services/db/dao/settings_dao.dart';
 
+import 'package:flutter/foundation.dart';
+import 'package:Bloomee/services/plugin/web_plugin_handler.dart';
+
 class PluginLoadStateService {
   final SettingsDAO _settingsDao;
   static Future<void> _mutationChain = Future<void>.value();
@@ -23,6 +26,13 @@ class PluginLoadStateService {
   }
 
   Future<Set<String>> readAutoLoadPluginIds() async {
+    if (kIsWeb) {
+      return {
+        WebPluginHandler.jioSaavnPluginId,
+        WebPluginHandler.ytMusicPluginId,
+        WebPluginHandler.ytVideoPluginId,
+      };
+    }
     final raw = await _settingsDao.getSettingStr(SettingKeys.autoLoadPluginIds);
     if (raw == null || raw.trim().isEmpty) return <String>{};
 

@@ -9,6 +9,7 @@ import 'package:Bloomee/services/plugin_bootstrap_service.dart';
 import 'package:Bloomee/services/onboarding_service.dart';
 import 'package:Bloomee/src/rust/frb_generated.dart';
 import 'package:Bloomee/services/db/db_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Application bootstrap — run once before [runApp].
@@ -19,11 +20,25 @@ import 'package:path_provider/path_provider.dart';
 /// - Schedule periodic DB maintenance tasks.
 /// - Wire the [ServiceLocator] and initialize the plugin system.
 Future<void> bootstrapApp() async {
-  // Initialize flutter_rust_bridge before any Rust API call.
-  await RustLib.init();
+  if (!kIsWeb) {
+    // Initialize flutter_rust_bridge before any Rust API call.
+    try {
+      await RustLib.init();
+    } catch (e) {
+      log('RustLib.init error: $e', name: 'Bootstrap');
+    }
+  }
 
-  final String appDocPath = (await getApplicationDocumentsDirectory()).path;
-  final String appSuppPath = (await getApplicationSupportDirectory()).path;
+  String appDocPath = '';
+  String appSuppPath = '';
+  if (!kIsWeb) {
+    try {
+      appDocPath = (await getApplicationDocumentsDirectory()).path;
+      appSuppPath = (await getApplicationSupportDirectory()).path;
+    } catch (e) {
+      log('path_provider error: $e', name: 'Bootstrap');
+    }
+  }
 
   // Open DB and schedule maintenance.
   await DBProvider.init(
@@ -63,7 +78,7 @@ Future<void> bootstrapApp() async {
     final autoScan =
         await settingsDao.getSettingBool(SettingKeys.localMusicAutoScan) ??
             true;
-    if (autoScan) {
+    if (!kIsWeb && autoScan) {
       unawaited(LocalMusicService.create().scanAndPersist());
     }
   } catch (e) {

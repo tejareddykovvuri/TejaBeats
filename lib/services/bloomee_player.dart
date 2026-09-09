@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 import 'package:Bloomee/core/adapters/track_adapter.dart';
 import 'package:Bloomee/core/models/exported.dart' hide MediaItem;
@@ -166,6 +167,7 @@ class BloomeeMusicPlayer extends BaseAudioHandler
   /// to retrieve the singleton, not to do async work. The listeners themselves
   /// are synchronous per the official audio_session example pattern.
   void _setupInterruptionListeners() {
+    if (kIsWeb) return;
     AudioSession.instance.then((session) {
       if (_isDisposed) return;
       _audioSession = session;

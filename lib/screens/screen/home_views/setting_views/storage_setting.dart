@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:Bloomee/blocs/settings_cubit/cubit/settings_cubit.dart';
 import 'package:Bloomee/screens/screen/home_views/setting_views/setting_shared_widgets.dart';
 import 'package:Bloomee/screens/widgets/snackbar.dart';
@@ -80,7 +81,7 @@ class BackupSettings extends StatelessWidget {
                       SettingNavTile(
                         icon: MingCute.folder_info_line,
                         title: l10n.storageBackupLocation,
-                        subtitle: Platform.isAndroid
+                        subtitle: (!kIsWeb && Platform.isAndroid)
                             ? l10n.storageBackupLocationAndroid
                             : (state.backupPath.isNotEmpty
                                 ? state.backupPath
@@ -100,7 +101,7 @@ class BackupSettings extends StatelessWidget {
                             if (value != null) {
                               SnackbarService.showMessage(
                                   l10n.storageBackupCreatedAt(value));
-                              if (Platform.isAndroid) {
+                              if (!kIsWeb && Platform.isAndroid) {
                                 try {
                                   SharePlus.instance
                                       .share(ShareParams(
@@ -137,7 +138,7 @@ class BackupSettings extends StatelessWidget {
                             if (value != null) {
                               SnackbarService.showMessage(
                                   l10n.storageBackupCreatedAt(value));
-                              if (Platform.isAndroid) {
+                              if (!kIsWeb && Platform.isAndroid) {
                                 try {
                                   SharePlus.instance
                                       .share(ShareParams(
@@ -280,7 +281,7 @@ class _BackupLocationDialog extends StatelessWidget {
             const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
       content: Text(
-        Platform.isAndroid
+        (!kIsWeb && Platform.isAndroid)
             ? l10n.storageLocationAndroid
             : l10n.storageLocationOther,
         style: Default_Theme.secondoryTextStyle

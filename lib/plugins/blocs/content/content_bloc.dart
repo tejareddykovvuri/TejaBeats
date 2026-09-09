@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -31,7 +31,9 @@ class ContentBloc extends Bloc<ContentEvent, ContentState> {
     required PluginService pluginService,
     String? initialPluginId,
   })  : _pluginService = pluginService,
-        super(ContentState(activePluginId: initialPluginId)) {
+        super(ContentState(
+            activePluginId: initialPluginId ??
+                (kIsWeb ? 'content-resolver.bloomfactory.jisaavn' : null))) {
     on<SearchContent>(_onSearch, transformer: _debounceSearchTransformer());
     on<LoadMoreSearchContent>(_onLoadMoreSearch);
     on<SetActiveContentPlugin>(_onSetActivePlugin);

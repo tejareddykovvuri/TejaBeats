@@ -293,6 +293,16 @@ class DesktopSidebar extends StatelessWidget {
             isActive: isLibraryActive,
             onTap: () => navigationShell.goBranch(1),
           ),
+          const SizedBox(height: 6),
+          _SidebarItem(
+            icon: MingCute.music_2_fill,
+            label: 'Now Playing',
+            isActive: false,
+            onTap: () {
+              HapticFeedback.lightImpact();
+              context.read<PlayerOverlayCubit>().showPlayer();
+            },
+          ),
           
           const SizedBox(height: 24),
           Padding(

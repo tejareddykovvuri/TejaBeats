@@ -15,6 +15,7 @@ import 'package:Bloomee/services/plugin/plugin_service.dart';
 import 'package:Bloomee/src/rust/api/plugin/plugin_info.dart';
 import 'package:Bloomee/src/rust/api/plugin/types.dart';
 import 'package:Bloomee/utils/country_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -69,6 +70,10 @@ class PluginBootstrapService {
   static bool get bootstrapDone => _bootstrapDone;
 
   static Future<void> checkAndCacheDone(SettingsDAO settingsDao) async {
+    if (kIsWeb) {
+      _bootstrapDone = true;
+      return;
+    }
     _bootstrapDone = await settingsDao
             .getSettingBool(SettingKeys.repositoriesBootstrapped) ??
         false;
@@ -300,47 +305,60 @@ class PluginBootstrapService {
     PluginService pluginService,
     SettingsDAO settingsDao,
   ) async {
+    if (kIsWeb) {
+      await settingsDao.putSettingStr(
+          SettingKeys.homePluginId, 'content-resolver.bloomfactory.jisaavn');
+      await settingsDao.putSettingStr(
+          SettingKeys.searchPluginId, 'content-resolver.bloomfactory.jisaavn');
+      return;
+    }
     try {
       final available = await _safeGetAvailable(pluginService);
 
-      final currentSuggestion =
-          await settingsDao.getSettingStr(SettingKeys.suggestionPluginId);
-      if (currentSuggestion == null || currentSuggestion.isEmpty) {
-        final suggestionPlugin = available.firstWhere(
-          (p) => p.pluginType == PluginType.searchSuggestionProvider,
-          orElse: () => throw StateError('none'),
-        );
-        await settingsDao.putSettingStr(
-            SettingKeys.suggestionPluginId, suggestionPlugin.manifest.id);
-        log('Auto-selected suggestion plugin: ${suggestionPlugin.manifest.id}',
-            name: 'PluginBootstrap');
-      }
+      try {
+        final currentSuggestion =
+            await settingsDao.getSettingStr(SettingKeys.suggestionPluginId);
+        if (currentSuggestion == null || currentSuggestion.isEmpty) {
+          final suggestionPlugin = available.firstWhere(
+            (p) => p.pluginType == PluginType.searchSuggestionProvider,
+            orElse: () => throw StateError('none'),
+          );
+          await settingsDao.putSettingStr(
+              SettingKeys.suggestionPluginId, suggestionPlugin.manifest.id);
+          log('Auto-selected suggestion plugin: ${suggestionPlugin.manifest.id}',
+              name: 'PluginBootstrap');
+        }
+      } catch (_) {}
 
-      final currentHome =
-          await settingsDao.getSettingStr(SettingKeys.homePluginId);
-      if (currentHome == null || currentHome.isEmpty) {
-        final homePlugin = available.firstWhere(
-          (p) => p.pluginType == PluginType.contentResolver,
-          orElse: () => throw StateError('none'),
-        );
-        await settingsDao.putSettingStr(
-            SettingKeys.homePluginId, homePlugin.manifest.id);
-        log('Auto-selected home plugin: ${homePlugin.manifest.id}',
-            name: 'PluginBootstrap');
-      }
+      try {
+        final currentHome =
+            await settingsDao.getSettingStr(SettingKeys.homePluginId);
+        if (currentHome == null || currentHome.isEmpty) {
+          final homePlugin = available.firstWhere(
+            (p) => p.pluginType == PluginType.contentResolver,
+            orElse: () => throw StateError('none'),
+          );
+          await settingsDao.putSettingStr(
+              SettingKeys.homePluginId, homePlugin.manifest.id);
+          log('Auto-selected home plugin: ${homePlugin.manifest.id}',
+              name: 'PluginBootstrap');
+        }
+      } catch (_) {}
 
-      final currentSearch =
-          await settingsDao.getSettingStr(SettingKeys.searchPluginId);
-      if (currentSearch == null || currentSearch.isEmpty) {
-        final searchPlugin = available.firstWhere(
-          (p) => p.pluginType == PluginType.contentResolver,
-          orElse: () => throw StateError('none'),
-        );
-        await settingsDao.putSettingStr(
-            SettingKeys.searchPluginId, searchPlugin.manifest.id);
-        log('Auto-selected search plugin: ${searchPlugin.manifest.id}',
-            name: 'PluginBootstrap');
-      }
+      try {
+        final currentSearch =
+            await settingsDao.getSettingStr(SettingKeys.searchPluginId);
+        if (currentSearch == null || currentSearch.isEmpty) {
+          final searchPlugin = available.firstWhere(
+            (p) => p.pluginType == PluginType.contentResolver,
+            orElse: () => throw StateError('none'),
+          );
+          await settingsDao.putSettingStr(
+              SettingKeys.searchPluginId, searchPlugin.manifest.id);
+          log('Auto-selected search plugin: ${searchPlugin.manifest.id}',
+              name: 'PluginBootstrap');
+        }
+      } catch (_) {}
     } catch (_) {}
   }
 
@@ -349,6 +367,7 @@ class PluginBootstrapService {
     required PluginRepositoryService repositoryService,
     required SettingsDAO settingsDao,
   }) async {
+    if (kIsWeb) return;
     final now = DateTime.now().toUtc();
     final lastSyncRaw =
         await settingsDao.getSettingStr(SettingKeys.pluginRepositoryLastSync);

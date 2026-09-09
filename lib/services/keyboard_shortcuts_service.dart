@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'package:Bloomee/blocs/media_player/bloomee_player_cubit.dart';
 import 'package:Bloomee/blocs/player_overlay/player_overlay_cubit.dart';
@@ -44,7 +45,8 @@ class _KeyboardShortcutsHandlerState extends State<KeyboardShortcutsHandler> {
   bool _onGlobalKeyEvent(KeyEvent event) {
     if (!mounted) return false;
 
-    if (!io.Platform.isWindows &&
+    if (!kIsWeb &&
+        !io.Platform.isWindows &&
         !io.Platform.isLinux &&
         !io.Platform.isMacOS &&
         !io.Platform.isAndroid) {

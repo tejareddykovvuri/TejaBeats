@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -167,13 +168,15 @@ class PlayerEngine {
   }
 
   void _configureNativePlayer(Player player) {
-    if (player.platform is NativePlayer) {
-      final native = player.platform as NativePlayer;
-      native.setProperty('stream-lavf-o',
-          'reconnect=1,reconnect_streamed=1,reconnect_delay_max=5');
-      native.setProperty('cache', 'yes');
-      native.setProperty('demuxer-max-bytes', '134217728'); // 128 MB
-      native.setProperty('network-timeout', '15');
+    if (!kIsWeb) {
+      final dynamic native = player.platform;
+      try {
+        native.setProperty('stream-lavf-o',
+            'reconnect=1,reconnect_streamed=1,reconnect_delay_max=5');
+        native.setProperty('cache', 'yes');
+        native.setProperty('demuxer-max-bytes', '134217728'); // 128 MB
+        native.setProperty('network-timeout', '15');
+      } catch (_) {}
     }
   }
 
@@ -203,12 +206,14 @@ class PlayerEngine {
         if (completed && _hasMedia && !_disposed && !_crossfadeTriggered) {
           final pos = _positionSubject.value;
           final dur = _durationSubject.value;
-          if (dur > Duration.zero && (dur - pos) > const Duration(seconds: 2)) {
+          if (pos > const Duration(seconds: 1) &&
+              dur > Duration.zero &&
+              (dur - pos) > const Duration(seconds: 2)) {
             log('Abnormal EOF detected (pos: $pos, dur: $dur). Routing to error handler.',
                 name: 'PlayerEngine');
             _triggerEngineFailure(
                 'Abnormal EOF: Connection dropped prematurely');
-          } else {
+          } else if (pos > Duration.zero || !kIsWeb) {
             _handleCompletion();
           }
         }
@@ -327,7 +332,8 @@ class PlayerEngine {
 
     try {
       await _active.setVolume(_userVolume * 100.0);
-      await _active.open(Media(uri.toString(), httpHeaders: httpHeaders),
+      await _active.open(
+          Media(uri.toString(), httpHeaders: kIsWeb ? null : httpHeaders),
           play: autoPlay);
       if (_disposed || _generation != gen) return EngineCanceled();
 
@@ -384,7 +390,8 @@ class PlayerEngine {
           log('Socket dropped while idle on standby. Executing fallback re-open.',
               name: 'PlayerEngine');
           await newPlayer.open(
-              Media(nextUri.toString(), httpHeaders: nextHeaders),
+              Media(nextUri.toString(),
+                  httpHeaders: kIsWeb ? null : nextHeaders),
               play: true);
         }
       }
@@ -448,7 +455,8 @@ class PlayerEngine {
         log('Socket dropped while idle on standby. Executing fallback re-open.',
             name: 'PlayerEngine');
         await newPlayer.open(
-            Media(nextUri.toString(), httpHeaders: nextHeaders),
+            Media(nextUri.toString(),
+                httpHeaders: kIsWeb ? null : nextHeaders),
             play: true);
       }
 
@@ -622,7 +630,8 @@ class PlayerEngine {
 
     try {
       await _standby.setVolume(0);
-      await _standby.open(Media(uri.toString(), httpHeaders: httpHeaders),
+      await _standby.open(
+          Media(uri.toString(), httpHeaders: kIsWeb ? null : httpHeaders),
           play: false);
       _preloadedNextUri = uri;
       _preloadedNextHeaders = httpHeaders;
@@ -752,9 +761,11 @@ class PlayerEngine {
     if (_disposed) return;
     try {
       final filter = _eqEnabled ? _buildEqualizerFilter() : '';
-      final platform = player.platform;
-      if (platform is NativePlayer) {
-        await platform.setProperty('af', filter);
+      if (!kIsWeb) {
+        final dynamic platform = player.platform;
+        try {
+          await platform.setProperty('af', filter);
+        } catch (_) {}
       }
     } catch (e) {
       log('Equalizer apply to player error: $e', name: 'PlayerEngine');

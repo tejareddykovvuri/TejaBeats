@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -31,7 +32,7 @@ bool isUpdateAvailable(
     if (neu < cur) return false;
   }
 
-  if (checkBuild && !Platform.isLinux) {
+  if (!kIsWeb && checkBuild && !Platform.isLinux) {
     int parseBuild(String b) {
       try {
         final parsed = int.parse(b);
@@ -212,6 +213,15 @@ Future<Map<String, dynamic>> githubUpdate(
 
 /// Public API for TejaBeats update checks
 Future<Map<String, dynamic>> getAppUpdates() async {
+  if (kIsWeb) {
+    return {
+      'results': false,
+      'error': null,
+      'currVer': '3.0.4',
+      'currBuild': '202',
+      'source': 'tejabeats',
+    };
+  }
   try {
     return await githubUpdate();
   } catch (_) {

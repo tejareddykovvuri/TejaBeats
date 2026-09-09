@@ -1,24 +1,31 @@
-import { dev } from '$app/environment';
-import os from 'os';
-import path from 'path';
-import fs from 'fs';
+import { getHomeSectionsJioSaavn } from '$lib/server/jiosaavn.js';
 
-/** @type {import('./$types').PageServerLoad} */
 export async function load() {
-	const prebuiltPath = path.join(
-		os.homedir(),
-		'Downloads',
-		'bloomee_tunes_windows_x64_v3.0.4+202',
-		'Bloomee.exe'
-	);
-	const hasPrebuilt = fs.existsSync(prebuiltPath);
-	
-	// Check if Visual Studio installer is present
-	const hasVisualStudio = fs.existsSync('C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe');
-
-	return {
-		isDev: dev,
-		hasPrebuilt,
-		hasVisualStudio
-	};
+	try {
+		const data = await getHomeSectionsJioSaavn();
+		return {
+			trendingTracks: data.trendingTracks || [],
+			chartTitle: data.chartTitle || 'Trending Superhits',
+			rainTherapy: data.rainTherapy || [],
+			communityPlaylists: data.communityPlaylists || [],
+			indiaHits: data.indiaHits || [],
+			newReleases: data.newReleases || [],
+			nostalgic: data.nostalgic || [],
+			danceHits: data.danceHits || [],
+			easyMornings: data.easyMornings || []
+		};
+	} catch (err) {
+		console.error('Initial page load failed:', err);
+		return {
+			trendingTracks: [],
+			chartTitle: 'Trending Superhits',
+			rainTherapy: [],
+			communityPlaylists: [],
+			indiaHits: [],
+			newReleases: [],
+			nostalgic: [],
+			danceHits: [],
+			easyMornings: []
+		};
+	}
 }
