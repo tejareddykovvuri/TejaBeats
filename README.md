@@ -25,10 +25,9 @@
 
 ## ⬇️ Download TejaBeats
 
-Download the latest version for **Windows** (`.exe`) and **Android** (`.apk`) directly from Releases:
+Download TejaBeats for **Windows** (`.exe`) and **Android** (`.apk`) from the official TejaBeats website:
 
-👉 **[Download Latest TejaBeats Release](https://github.com/ktssr016-ux/TejaBeats/releases/latest)**
-
+👉  **[Download TejaBeats](https://tejabeats.vercel.app)**
 ---
 
 ## 🛠️ Build & Development Setup
@@ -60,9 +59,10 @@ flutter run -d windows
 ## 📄 License & Attribution
 
 TejaBeats is an open-source music player application.
+TejaBeats is a modified derivative work based on [BloomeeTunes](https://github.com/HemantKArya/BloomeeTunes), originally developed by Hemant Kumar and Bloomee contributors.
 
 * **Software License:** Licensed under the **GNU General Public License Version 2.0 (GPL-2.0)**. See the complete text in the [LICENSE](LICENSE) file.
-* **Copyright:** Copyright © 2026 Teja. All rights reserved.
+* * **TejaBeats Modifications:** © 2026 Teja. TejaBeats is a modified derivative work based on BloomeeTunes and is distributed under GPL-2.0.
 * **Third-Party Libraries & Fonts:** Third-party components used by TejaBeats are subject to their respective open-source licenses (MIT, Apache-2.0, BSD-3-Clause, SIL OFL 1.1). See [OPEN_SOURCE_LICENSES.md](OPEN_SOURCE_LICENSES.md) or the in-app **Open Source Licenses** view for full details.
 
 ---
