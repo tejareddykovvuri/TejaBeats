@@ -166,7 +166,7 @@ Future<Map<String, dynamic>> sourceforgeUpdate(
 Future<Map<String, dynamic>> githubUpdate(
     {Duration timeout = const Duration(seconds: 6)}) async {
   final url =
-      'https://api.github.com/repos/ktssr016-ux/TejaBeats/releases/latest';
+      'https://api.github.com/repos/tejareddykovvuri/TejaBeats/releases/latest';
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   try {
     final response = await http.get(Uri.parse(url)).timeout(timeout);
@@ -258,7 +258,7 @@ Future<Map<String, dynamic>> getAppUpdates() async {
 Future<String?> fetchChangelog(
     {Duration timeout = const Duration(seconds: 6)}) async {
   const changelogUrl =
-      'https://raw.githubusercontent.com/ktssr016-ux/TejaBeats/main/CHANGELOG.md';
+      'https://raw.githubusercontent.com/tejareddykovvuri/TejaBeats/main/CHANGELOG.md';
   try {
     final response = await http.get(Uri.parse(changelogUrl)).timeout(timeout);
     if (response.statusCode == 200) {
