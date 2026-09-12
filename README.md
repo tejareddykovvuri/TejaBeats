@@ -3,8 +3,8 @@
 **YOUR MUSIC. YOUR BEATS.** — A high-performance, ad-free desktop and mobile music player built with Flutter & Rust.
 
 <p align="center">
-  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/ktssr016-ux/TejaBeats?display_name=release&style=for-the-badge&color=FF2D78">
-  <img alt="GitHub License" src="https://img.shields.io/github/license/ktssr016-ux/TejaBeats?style=for-the-badge&color=1881cc">
+  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/tejareddykovvuri/TejaBeats?display_name=release&style=for-the-badge&color=FF2D78">
+  <img alt="GitHub License" src="https://img.shields.io/github/license/tejareddykovvuri/TejaBeats?style=for-the-badge&color=1881cc">
   <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
 </p>
@@ -38,7 +38,7 @@ Download TejaBeats for **Windows** (`.exe`) and **Android** (`.apk`) from the of
 
 ### Run Locally
 ```bash
-git clone https://github.com/ktssr016-ux/TejaBeats.git
+git clone https://github.com/tejareddykovvuri/TejaBeats.git
 cd TejaBeats
 flutter pub get
 flutter run -d windows
