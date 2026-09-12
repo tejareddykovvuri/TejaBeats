@@ -62,7 +62,7 @@ TejaBeats is an open-source music player application.
 TejaBeats is a modified derivative work based on [BloomeeTunes](https://github.com/HemantKArya/BloomeeTunes), originally developed by Hemant Kumar and Bloomee contributors.
 
 * **Software License:** Licensed under the **GNU General Public License Version 2.0 (GPL-2.0)**. See the complete text in the [LICENSE](LICENSE) file.
-* * **TejaBeats Modifications:** © 2026 Teja. TejaBeats is a modified derivative work based on BloomeeTunes and is distributed under GPL-2.0.
+* **TejaBeats Modifications:** © 2026 Teja. TejaBeats is a modified derivative work based on BloomeeTunes and is distributed under GPL-2.0.
 * **Third-Party Libraries & Fonts:** Third-party components used by TejaBeats are subject to their respective open-source licenses (MIT, Apache-2.0, BSD-3-Clause, SIL OFL 1.1). See [OPEN_SOURCE_LICENSES.md](OPEN_SOURCE_LICENSES.md) or the in-app **Open Source Licenses** view for full details.
 
 ---
