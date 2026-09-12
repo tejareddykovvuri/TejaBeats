@@ -18,7 +18,7 @@ All original copyright notices, license texts, and attribution from the Bloomee 
 Pursuant to Section 2(a) of the GNU General Public License v2.0, the following prominent notice identifies modifications made in this derivative work:
 
 * **Modifications Copyright:** Copyright © 2026 Teja
-* **Derivative Project Repository:** [ktssr016-ux/TejaBeats](https://github.com/ktssr016-ux/TejaBeats)
+* **Derivative Project Repository:** https://github.com/tejareddykovvuri/TejaBeats
 * **Date of Modifications:** 2026
 
 ### Summary of Changes Made in TejaBeats:
@@ -34,8 +34,8 @@ Pursuant to Section 2(a) of the GNU General Public License v2.0, the following p
    * Configured Android release signing properties, Gradle packaging optimizations, and target SDK configurations.
 
 3. **Application Updates & Maintenance:**
-   * Updated in-app update checker (`lib/services/bloomee_updater_tools.dart`) to track official TejaBeats releases on GitHub (`ktssr016-ux/TejaBeats`).
-
+   * Updated in-app update checker (`lib/services/bloomee_updater_tools.dart`) to track TejaBeats releases on GitHub (`tejareddykovvuri/TejaBeats`).
+   
 4. **License Compliance & Open Source Attribution:**
    * Corrected license declarations across repository files to consistently specify GNU GPL v2.0.
    * Added `OPEN_SOURCE_LICENSES.md` detailing all Flutter, Rust, font, and toolchain dependencies.
